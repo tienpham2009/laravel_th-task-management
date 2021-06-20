@@ -8,20 +8,19 @@ use Illuminate\Support\Facades\Session;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $tasks = Task::all();
         return view('index', compact('tasks'));
     }
 
-    public function create()
+    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('add');
     }
 
     public function store(Request $request)
     {
-        //Khởi tạo mới đối tượng task, gán các trường tương ứng với request gửi lên từ trình duyệt
         $task = new Task();
         $task->title = $request->inputTitle;
         $task->content = $request->inputContent;
@@ -29,6 +28,7 @@ class TaskController extends Controller
 
         $file = $request->inputFile;
         // Nếu file không tồn tại thì trường image gán bằng NULL
+
         if (!$request->hasFile('inputFile')) {
             $task->image = $file;
         } else {
@@ -40,10 +40,10 @@ class TaskController extends Controller
             $newFileName = "$fileName.$fileExtension";
 
             //Lưu file vào thư mục storage/app/public/image với tên mới
-            $request->file('inputFile')->storeAs('public/images', $newFileName);
+            $request->file('inputFile')->storeAs('public/images', $file);
 
             // Gán trường image của đối tượng task với tên mới
-            $task->image = $newFileName;
+            $task->image = $file;
         }
         $task->save();
 
