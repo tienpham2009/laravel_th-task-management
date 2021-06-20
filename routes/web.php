@@ -22,5 +22,8 @@ Route::prefix('tasks')->group(function (){
     Route::get('/create' , [TaskController::class , 'create'])->name('tasks.create');
     Route::post('/store' , [TaskController::class , 'store'])->name('tasks.store');
     Route::get('/list' , [TaskController::class , 'showList'])->name('tasks.list');
+    Route::get('{id}/edit' , [TaskController::class , 'edit'])->name('tasks.edit');
+    Route::post('{id}/update' , [TaskController::class , 'update'])->name('tasks.update');
+    Route::get('{id}/delete' , [TaskController::class , 'destroy'])->name('tasks.delete');
 });
 

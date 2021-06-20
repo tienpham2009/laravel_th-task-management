@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -57,4 +58,57 @@ class TaskController extends Controller
         $tasks = Task::all();
         return view('tasks.list' , compact('tasks'));
     }
+
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        return view('tasks.update' , compact('task'));
+    }
+
+    public function update(Request $request , $id)
+    {
+        $task = Task::findOrFail($id);
+        $task->title = $request->input('title');
+        $task->content = $request->input('content');
+
+        //cap nhat anh
+        if ($request->hasFile('image')) {
+
+            //xoa anh cu neu co
+            $currentImg = $task->image;
+            if ($currentImg) {
+                Storage::delete('/public/' . $currentImg);
+            }
+            // cap nhat anh moi
+            $image = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('images', $image , 'public');
+            $task->image = $image;
+        }
+
+        $task->due_date = $request->input('due_date');
+        $task->save();
+
+        //dung session de dua ra thong bao
+        Session::flash('success', 'Cập nhật thành công');
+        //tao moi xong quay ve trang danh sach task
+        return redirect()->route('tasks.list');
+    }
+
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+        $image = $task->image;
+
+        //delete image
+        if ($image) {
+            Storage::delete('/public/' . $image);
+        }
+        $task->delete();
+        //dung session de dua ra thong bao
+        Session::flash('success', 'Xóa thành công');
+        //xoa xong quay ve trang danh sach task
+        return redirect()->route('tasks.list');
+    }
+
+
 }
