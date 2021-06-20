@@ -51,4 +51,10 @@ class TaskController extends Controller
         Session::flash('create-success', $message);
         return redirect()->route('tasks.index', compact('message'));
     }
+
+    public function showList(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $tasks = Task::all();
+        return view('tasks.list' , compact('tasks'));
+    }
 }
