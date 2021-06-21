@@ -77,11 +77,11 @@ class TaskController extends Controller
             //xoa anh cu neu co
             $currentImg = $task->image;
             if ($currentImg) {
-                Storage::delete('/public/' . $currentImg);
+                Storage::delete('public/images/' . $currentImg);
             }
             // cap nhat anh moi
             $image = $request->file('image')->getClientOriginalName();
-            $request->file('image')->storeAs('images', $image , 'public');
+            $request->file('image')->storeAs('public/images', $image);
             $task->image = $image;
         }
 

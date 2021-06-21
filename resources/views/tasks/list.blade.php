@@ -37,7 +37,7 @@
                                 <td>{{ $task->created_at }}</td>
                                 <td>{{ $task->due_date }}</td>
                                 <td>
-                                    <img src="{{ asset('storage/app/images/' . $task->image) }}" alt="" style="width: 150px">
+                                    <img src="{{ asset('storage/images/' . $task->image) }}" alt="" style="width: 150px">
                                 </td>
                                 <td>
                                     <a href="{{route('tasks.edit' , $task->id)}}" type="button" class="btn btn-primary">edit</a>
